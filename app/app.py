@@ -363,7 +363,7 @@ st.divider()
 
 st.markdown(
     """
-<div style="font-size:0.80rem; color:#6c757d; line-height:1.35;">
+<div style="font-size:0.80rem; color:#6c757d; line-height:1.0;">
 
 <b>🌺 Pacific Nutrition Transition Observatory</b><br>
 
@@ -384,13 +384,13 @@ An interactive research observatory exploring relationships between food systems
 github.com/sonjanovotny/pacific-nutrition-transition-observatory
 </a>
 
-<br><br>
+<br>
 
 <i>Helping transform publicly available Pacific health and food system data into accessible, evidence-based insights.</i>
 
-<br><br>
+<br>
 
-Version 1.0 • June 2026 • © 2026 Sonja L. Novotny
+<b>Version 1.0 • June 2026 • © 2026 Sonja L. Novotny</b>
 
 </div>
 """,
