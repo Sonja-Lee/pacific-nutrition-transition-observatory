@@ -189,16 +189,15 @@ with relationship_tab:
         st.dataframe(rel, use_container_width=True)
     else:
         corr = rel["X value"].corr(rel["Y value"])
-        fig = px.scatter(
-            rel,
-            x="X value",
-            y="Y value",
-            text="Country",
-            hover_data=["Country", "X year", "Y year"],
-            trendline="ols",
-            labels={"X value": x_label, "Y value": y_label},
-            title=f"{x_label} vs {y_label} across Pacific jurisdictions"
-        )
+            fig = px.scatter(
+                rel,
+                x="X value",
+                y="Y value",
+                text="Country",
+                hover_data=["Country", "X year", "Y year"],
+                labels={"X value": x_label, "Y value": y_label},
+                title=f"{x_label} vs {y_label} across Pacific jurisdictions"
+            )
         fig.update_traces(textposition="top center")
         st.plotly_chart(fig, use_container_width=True)
         st.metric("Pearson correlation", f"{corr:.2f}")
