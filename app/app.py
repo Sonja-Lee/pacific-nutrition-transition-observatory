@@ -183,11 +183,10 @@ with insights_tab:
         "These patterns are exploratory. The dashboard combines multiple source "
         "datasets with different reporting years and uneven country coverage. The value here "
         "is not a final conclusion; it is a faster way to identify which relationships deserve "
-        "closer inspection."
-
-        “The purpose of this observatory is not to prove causation. It is to rapidly surface "
+        "closer inspection.\n\n"
+        "The purpose of this observatory is not to prove causation. It is to rapidly surface "
         "meaningful patterns and relationships across Pacific food systems and metabolic health "
-        "so they can be investigated further.
+        "so they can be investigated further."
     )
 
 with overview_tab:
