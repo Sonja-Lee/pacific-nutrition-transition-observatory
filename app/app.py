@@ -83,7 +83,7 @@ with insights_tab:
         "This section highlights the most significant observable patterns and relationships between food"
             "systems, nutrition, and metabolic health across Pacific Island countries and territories."
     )
-
+    
     st.subheader("Top current metabolic health signals")
 
     def latest_table(data, column, multiplier=1):
@@ -103,7 +103,7 @@ with insights_tab:
 
     obesity_rank = latest_table(observatory, "Obesity_Pct", 1)
     diabetes_rank = latest_table(observatory, "Diabetes_Pct", 100)
-    food_import_rank = latest_table(observatory, "Food_Imports_Export_Value_Pct", 1)
+    dietary_energy_rank = latest_table(observatory, "Dietary_Energy_kcal", 1)
 
     col1, col2, col3 = st.columns(3)
 
@@ -123,12 +123,13 @@ with insights_tab:
             f"{top['Value']:.1f}% in {int(top['Latest year'])}"
         )
 
-    if not food_import_rank.empty:
-        top = food_import_rank.iloc[0]
+    if not dietary_energy_rank.empty:
+        top = dietary_energy_rank.iloc[0]
         col3.metric(
-            "Highest food import dependency",
+            "Highest dietary energy supply",
             f"{top['Country']}",
-            f"{top['Value']:.1f}% in {int(top['Latest year'])}"
+            f"{top['Value']:,.0f} kcal/day",
+            f"{int(top['Latest year'])}"
         )
 
     st.subheader("Food system vs health relationships")
@@ -159,22 +160,34 @@ with insights_tab:
         relationship_df = relationship_df.sort_values("Pearson r", ascending=False)
         strongest = relationship_df.iloc[0]
 
-        st.info(
-            f"Strongest positive relationship currently visible: "
-            f"**{strongest['Relationship']}** "
-            f"(Pearson r = {strongest['Pearson r']:.2f}, "
-            f"n = {int(strongest['Countries with data'])} countries)."
-        )
+    st.info(
+        f"""
+    ### Observatory Insight
 
-        st.dataframe(relationship_df, use_container_width=True)
+    Across Pacific Island jurisdictions with overlapping data,
+    **{strongest['Relationship']}** currently shows the strongest
+    positive relationship observed in this dataset.
+
+    Pearson correlation: **r = {strongest['Pearson r']:.2f}**, based on **{int(strongest['Countries with data'])} countries**.
+
+    This relationship is exploratory rather than causal, but it identifies
+    a pattern that warrants closer investigation.
+    """
+    )
+        
+    st.dataframe(relationship_df, use_container_width=True)
 
     st.subheader("Interpretation caution")
 
     st.write(
-        "These patterns are exploratory, not causal. The dashboard combines multiple source "
+        "These patterns are exploratory. The dashboard combines multiple source "
         "datasets with different reporting years and uneven country coverage. The value here "
         "is not a final conclusion; it is a faster way to identify which relationships deserve "
         "closer inspection."
+
+        “The purpose of this observatory is not to prove causation. It is to rapidly surface "
+        "meaningful patterns and relationships across Pacific food systems and metabolic health "
+        "so they can be investigated further.
     )
 
 with overview_tab:
