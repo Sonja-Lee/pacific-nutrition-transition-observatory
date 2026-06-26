@@ -128,8 +128,7 @@ with insights_tab:
         col3.metric(
             "Highest dietary energy supply",
             f"{top['Country']}",
-            f"{top['Value']:,.0f} kcal/day",
-            f"{int(top['Latest year'])}"
+            f"{top['Value']:,.0f} kcal/day in {int(top['Latest year'])}"
         )
 
     st.subheader("Food system vs health relationships")
