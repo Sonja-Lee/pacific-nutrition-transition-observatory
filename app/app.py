@@ -72,9 +72,110 @@ selected_country = st.selectbox(
 
 country_data = observatory[observatory["Country"] == selected_country].sort_values("Year")
 
-overview_tab, food_tab, relationship_tab, rankings_tab, data_tab = st.tabs(
-    ["Overview", "Food Systems", "Relationships", "Rankings", "Data"]
+insights_tab, overview_tab, food_tab, relationship_tab, rankings_tab, data_tab = st.tabs(
+    ["Key Insights", "Overview", "Food Systems", "Relationships", "Rankings", "Data"]
 )
+
+with insights_tab:
+    st.header("Key Insights")
+
+    st.write(
+        "This section highlights the most significant observable patterns and relationships between food"
+            "systems, nutrition, and metabolic health across Pacific Island countries and territories."
+    )
+
+    st.subheader("Top current metabolic health signals")
+
+    def latest_table(data, column, multiplier=1):
+        rows = []
+        for country in sorted(data["Country"].dropna().unique()):
+            cdf = data[data["Country"] == country]
+            valid = cdf[["Year", column]].dropna()
+            if valid.empty:
+                continue
+            row = valid.sort_values("Year").iloc[-1]
+            rows.append({
+                "Country": country,
+                "Value": row[column] * multiplier,
+                "Latest year": int(row["Year"])
+            })
+        return pd.DataFrame(rows).sort_values("Value", ascending=False).reset_index(drop=True)
+
+    obesity_rank = latest_table(observatory, "Obesity_Pct", 1)
+    diabetes_rank = latest_table(observatory, "Diabetes_Pct", 100)
+    food_import_rank = latest_table(observatory, "Food_Imports_Export_Value_Pct", 1)
+
+    col1, col2, col3 = st.columns(3)
+
+    if not obesity_rank.empty:
+        top = obesity_rank.iloc[0]
+        col1.metric(
+            "Highest obesity",
+            f"{top['Country']}",
+            f"{top['Value']:.1f}% in {int(top['Latest year'])}"
+        )
+
+    if not diabetes_rank.empty:
+        top = diabetes_rank.iloc[0]
+        col2.metric(
+            "Highest diabetes",
+            f"{top['Country']}",
+            f"{top['Value']:.1f}% in {int(top['Latest year'])}"
+        )
+
+    if not food_import_rank.empty:
+        top = food_import_rank.iloc[0]
+        col3.metric(
+            "Highest food import dependency",
+            f"{top['Country']}",
+            f"{top['Value']:.1f}% in {int(top['Latest year'])}"
+        )
+
+    st.subheader("Food system vs health relationships")
+
+    relationship_checks = {
+        "Dietary energy vs obesity": ("Dietary_Energy_kcal", "Obesity_Pct", 1, 1),
+        "Fat supply vs obesity": ("Fat_g", "Obesity_Pct", 1, 1),
+        "Food imports vs obesity": ("Food_Imports_Export_Value_Pct", "Obesity_Pct", 1, 1),
+        "Food imports vs diabetes": ("Food_Imports_Export_Value_Pct", "Diabetes_Pct", 1, 100),
+    }
+
+    relationship_rows = []
+
+    for label, (x_col, y_col, x_mult, y_mult) in relationship_checks.items():
+        rel = latest_country_values(observatory, x_col, y_col, x_mult, y_mult)
+        if len(rel) >= 3:
+            relationship_rows.append({
+                "Relationship": label,
+                "Countries with data": len(rel),
+                "Pearson r": rel["X value"].corr(rel["Y value"])
+            })
+
+    relationship_df = pd.DataFrame(relationship_rows)
+
+    if relationship_df.empty:
+        st.warning("Not enough overlapping data to calculate relationship signals.")
+    else:
+        relationship_df = relationship_df.sort_values("Pearson r", ascending=False)
+        strongest = relationship_df.iloc[0]
+
+        st.info(
+            f"Strongest positive relationship currently visible: "
+            f"**{strongest['Relationship']}** "
+            f"(Pearson r = {strongest['Pearson r']:.2f}, "
+            f"n = {int(strongest['Countries with data'])} countries)."
+        )
+
+        st.dataframe(relationship_df, use_container_width=True)
+
+    st.subheader("Interpretation caution")
+
+    st.write(
+        "These patterns are exploratory, not causal. The dashboard combines multiple source "
+        "datasets with different reporting years and uneven country coverage. The value here "
+        "is not a final conclusion; it is a faster way to identify which relationships deserve "
+        "closer inspection."
+    )
 
 with overview_tab:
     st.header(selected_country)
