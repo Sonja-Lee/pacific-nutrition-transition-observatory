@@ -5,7 +5,8 @@ from pathlib import Path
 st.set_page_config(
     page_title="Pacific Nutrition Transition Observatory",
     page_icon="🌺",
-    layout="wide"
+    layout="wide",
+    initial_sidebar_state="collapsed"
 )
 
 DATA_PATH = Path(__file__).resolve().parents[1] / "data" / "processed" / "pacific_nutrition_transition_observatory.csv"
@@ -39,14 +40,12 @@ st.write(
     "across Pacific Island countries and territories."
 )
 
-st.sidebar.header("Explorer Controls")
-
 countries = sorted(observatory["Country"].dropna().unique())
 default_country = "Fiji"
 default_index = countries.index(default_country) if default_country in countries else 0
 
-selected_country = st.sidebar.selectbox(
-    "Select country",
+selected_country = st.selectbox(
+    "Select a country or territory",
     countries,
     index=default_index
 )
@@ -87,13 +86,19 @@ st.line_chart(
     trend_data.set_index("Year")[["Obesity", "Diabetes", "Hypertension"]]
 )
 
+st.caption(
+    "Metric cards show the latest available non-missing value for each indicator. "
+    "Years may differ because source datasets are updated on different schedules."
+)
+
 st.divider()
 
 st.subheader("Dataset Preview")
 
 st.write(f"Rows: {observatory.shape[0]}")
 st.write(f"Columns: {observatory.shape[1]}")
-st.write(f"Countries: {observatory['Country'].nunique()}")
+st.write(f"Countries and territories: {observatory['Country'].nunique()}")
 st.write(f"Years: {observatory['Year'].min()} to {observatory['Year'].max()}")
 
-st.dataframe(observatory.head())
+with st.expander("Show first rows of dataset"):
+    st.dataframe(observatory.head(), use_container_width=True)
