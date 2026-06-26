@@ -358,3 +358,28 @@ with data_tab:
 
     with st.expander("Show first rows of dataset"):
         st.dataframe(observatory.head(), use_container_width=True)
+
+st.divider()
+
+st.markdown("""
+### Pacific Nutrition Transition Observatory
+
+**Designed and developed by Sonja L. Novotny**
+
+**University of Hawaiʻi SCIPE Data Science Program**  
+Summer 2026
+
+An interactive research observatory exploring relationships between food systems, nutrition transition, and noncommunicable disease across Pacific Island countries and territories using publicly available international datasets.
+
+**Primary Data Sources**
+- World Health Organization (WHO)
+- Food and Agriculture Organization of the United Nations (FAO)
+- World Bank Open Data
+
+**Source Code**  
+https://github.com/sonjanovotny/pacific-nutrition-transition-observatory
+
+*Helping transform publicly available Pacific health and food system data into accessible, evidence-based insights.*
+
+**Version 1.0 • June 2026**
+""")
