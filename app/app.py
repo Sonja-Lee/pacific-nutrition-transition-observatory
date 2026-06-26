@@ -369,15 +369,13 @@ st.markdown(
 
 Designed and developed by <b>Sonja L. Novotny</b> | University of Hawaiʻi SCIPE Data Science Program | Summer 2026
 
-<br><br>
+<br>
 
 An interactive research observatory exploring relationships between food systems, nutrition transition, and noncommunicable disease across Pacific Island countries and territories using publicly available international datasets.
 
-<br><br>
+<br>
 
 <b>Primary Data Sources:</b> World Health Organization (WHO) • Food and Agriculture Organization of the United Nations (FAO) • World Bank Open Data
-
-<br>
 
 <b>Project Repository:</b>
 <a href="https://github.com/sonjanovotny/pacific-nutrition-transition-observatory" target="_blank">
